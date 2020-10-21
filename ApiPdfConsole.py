@@ -19,14 +19,14 @@ from pydantic import BaseModel
 from pdf_annotate import PdfAnnotator, Location, Appearance
 from pdfrw import PdfReader
 
-loggingConfigFile = "C:/Users/frann/Documents/utilspython/logging.conf"
+loggingConfigFile = "C:/inetpub/utilspython/logging.conf"
 logging.config.fileConfig(loggingConfigFile, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 mainhandler = FastAPI()
 
-UsersImageLocation = "C:/Users/frann/source/repos/asp-web/DRD.app/Images/"
-ConfigFileLocation = "C:/Users/frann/Documents/utilspython/"
+UsersImageLocation = "C:/inetpub/wwwroot/Images/"
+ConfigFileLocation = "C:/inetpub/utilspython/"
 
 class IdentityDetails(BaseModel):
     encryptedUserId:str
@@ -204,16 +204,18 @@ async def addIdentity(pdf, annotationItem:AnnotationDetail):
         xStart= annotationItem.x
         yStart= sizePapper[1] - (annotationItem.y)
         # Keep image ration at 1:1
-        imageHeight = annotationItem.height * 0.75
+        imageHeight = annotationItem.height * 0.8
         xEnd= xStart + imageHeight
-        yEnd= yStart - imageHeight
+        yEnd= yStart - (annotationItem.height * 0.8)
         imageLocation = UsersImageLocation +"/Member/"+ annotationItem.identification.encryptedUserId + "/" + annotationItem.identification.imageFileName
         pdf.add_annotation(
             'image',
             Location(x1= xStart, y1= yEnd, x2= xEnd, y2= yStart, page= annotationItem.page - 1),
             Appearance(stroke_width= 0, image= imageLocation),
         )
-        xEnd= xStart + annotationItem.width
+        xEnd= xStart + annotationItem.width + 5
+        if xEnd > sizePapper[0]:
+            xEnd == sizePapper[0]
         yStart= yStart - (annotationItem.height * 0.8)
         yEnd= yStart - (annotationItem.height * 0.2)
         textIdentification= annotationItem.identification.name + "\n" + annotationItem.identification.code

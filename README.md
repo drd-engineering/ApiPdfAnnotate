@@ -6,7 +6,8 @@
 pyinstaller --hidden-import=win32timezone --additional-hooks-dir=C:\inetpub\utilspython\.hooks ApiPdfConsole.py
 ```
 
-then you can run the build result in dist\ApiPdfConsole.exe on the background process by using task scheduler windows
+then you can run the build result in dist\ApiPdfConsole.exe on the background process by using task scheduler windows (NOTE : you should add font file that pdf_annotate python used, you can use the folder available in this directory, move it to dist\ApiPdfConsole)
+
 
 then if you want to test the app before create the windows service you can run the ApiPdfConsole.py itself on terminal. But you need to create your virtual environment first and install the requirement on requirements.txt. as the example code below.
 
